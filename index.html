@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<script>
+  (function() {
+    var GA_ID = 'G-RQ06JN51LC';
+    var isLocalDev = ['localhost', '127.0.0.1', ''].includes(location.hostname);
+    if (isLocalDev) return;
+    try { if (/[?&]no_ga=0/.test(location.search)) localStorage.removeItem('no_ga'); if (/[?&]no_ga=1/.test(location.search)) localStorage.setItem('no_ga', '1'); if (localStorage.getItem('no_ga') === '1') return; } catch (e) {}
+    var gaQ = new URLSearchParams(location.search); if (gaQ.get('obs') === '1' || gaQ.get('no_ga') === '1') return;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+    document.addEventListener('click', function(e) {
+      var a = e.target && e.target.closest ? e.target.closest('a[href*="booth.pm"]:not([href*="/search"])') : null;
+      if (!a) return;
+      gtag('event', 'booth_click', { link_url: a.href, link_id: a.id || '', link_text: (a.textContent || '').trim().slice(0, 40) });
+    });
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="写真やイラストに集中線と漫画の吹き出しを無料で入れて画像(PNG)で保存(登録不要)。線の数・太さ・中心を調整、吹き出しは丸・トゲ・四角、縦書きにも対応。背景を透明にすれば集中線・吹き出しの透過PNG素材に。SNSの画像・動画のサムネイル・漫画に。">
+<link rel="canonical" href="https://uuhai0625.github.io/shuchusen-fukidashi/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="集中線・吹き出しメーカー|集中線と吹き出しを無料で作成・画像に入れる(透過PNG素材も・登録不要)">
+<meta property="og:description" content="写真やイラストに集中線と漫画の吹き出しを無料で入れて画像(PNG)で保存(登録不要)。線の数・太さ・中心を調整、吹き出しは丸・トゲ・四角、縦書きにも対応。背景を透明にすれば集中線・吹き出しの透過PNG素材に。SNSの画像・動画のサムネイル・漫画に。">
+<meta property="og:url" content="https://uuhai0625.github.io/shuchusen-fukidashi/">
+<meta property="og:image" content="https://uuhai0625.github.io/shuchusen-fukidashi/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>集中線・吹き出しメーカー|集中線と吹き出しを無料で作成・画像に入れる(透過PNG素材も・登録不要)</title>
+<style>
+  :root {
+    --bg: #f3f4f7;
+    --panel: #ffffff;
+    --border: #d9dce5;
+    --field-border: #676b7d;
+    --text: #1f2230;
+    --muted: #545869;
+    --accent: #2b2f3f;
+    --accent-dark: #11131c;
+    --hl: #d6334a;
+    --ng: #b3261e;
+    --locked: #c5c8d4;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+  header { background: linear-gradient(135deg, #3a3f55, var(--accent-dark)); color: #fff; padding: 24px 20px 18px; text-align: center; }
+  header h1 { margin: 0 0 6px; font-size: 1.35rem; }
+  header p { margin: 0; font-size: .9rem; }
+  main { max-width: 1040px; margin: 0 auto; padding: 22px 16px 50px; }
+  main > * { min-width: 0; }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+  .layout > div { min-width: 0; }
+  .layout > .col-pv { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; }
+  section.card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 18px; }
+  section.card h2 { margin: 0 0 6px; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .desc { color: var(--muted); font-size: .84rem; margin: 0 0 12px; }
+  .fine { color: var(--muted); font-size: .8rem; margin: 8px 0 0; }
+  .badge { display: inline-block; font-size: .7rem; padding: 2px 8px; border-radius: 999px; background: #fff1cc; color: #7a5600; font-weight: bold; }
+  .hidden { display: none !important; }
+  label.field { display: block; margin-bottom: 12px; }
+  .lbl { font-size: .85rem; font-weight: bold; display: block; }
+  .lbl output { font-weight: normal; color: var(--muted); margin-left: 6px; }
+  .hint { font-size: .78rem; color: var(--muted); font-weight: normal; display: block; margin-top: 2px; }
+  input[type=text], input[type=number], select, textarea { width: 100%; margin-top: 5px; padding: 8px 10px; min-height: 44px; border: 1px solid var(--field-border); border-radius: 8px; font-size: 1rem; font-family: inherit; background: #fff; color: var(--text); }
+  textarea { resize: vertical; min-height: 76px; line-height: 1.5; }
+  input[type=range] { width: 100%; min-height: 44px; margin: 0; accent-color: var(--hl); }
+  input[type=file] { margin-top: 5px; min-height: 44px; font-size: .9rem; max-width: 100%; }
+  input[type=color] { width: 56px; height: 44px; margin-top: 5px; }
+  .check { display: flex; align-items: center; gap: 8px; min-height: 44px; font-weight: bold; font-size: .9rem; cursor: pointer; }
+  .check input { width: 22px; height: 22px; }
+  .row2 { display: flex; gap: 12px; }
+  .row2 > * { flex: 1; min-width: 0; }
+  .btn-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .btn { min-height: 44px; padding: 9px 16px; border-radius: 8px; font-size: .88rem; cursor: pointer; border: 1px solid var(--field-border); background: #fff; color: var(--text); font-family: inherit; }
+  .btn.primary { background: var(--hl); border-color: var(--hl); color: #fff; font-weight: bold; }
+  .btn.small { min-width: 44px; padding: 6px 10px; }
+  .btn[aria-pressed=true] { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: bold; }
+  .btn.link { border: 0; background: none; color: var(--muted); text-decoration: underline; padding: 6px 0; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible, img:focus-visible { outline: 2px solid var(--hl); outline-offset: 2px; }
+  .btn-row .btn { flex: 1; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .status { font-size: .82rem; color: var(--muted); margin-top: 6px; min-height: 1.2em; }
+  .status.err, .err { color: var(--ng); font-weight: bold; }
+  .preview { border: 1px solid var(--border); border-radius: 8px; background: #e4e6ec; padding: 12px; text-align: center; }
+  .preview img { max-width: 100%; max-height: 66vh; height: auto; cursor: crosshair; box-shadow: 0 2px 10px rgba(0,0,0,.18);
+    background-color: #fff; background-image: linear-gradient(45deg, #d8d8d8 25%, transparent 25%, transparent 75%, #d8d8d8 75%), linear-gradient(45deg, #d8d8d8 25%, transparent 25%, transparent 75%, #d8d8d8 75%); background-size: 20px 20px; background-position: 0 0, 10px 10px; }
+  .place { display: flex; gap: 0 10px; flex-wrap: wrap; align-items: center; font-size: .84rem; margin: 8px 0 0; padding: 0; border: 0; }
+  .place legend { padding: 0; width: 100%; }
+  .place label { display: flex; align-items: center; gap: 4px; min-height: 44px; cursor: pointer; }
+  .info { font-size: .84rem; margin-top: 8px; }
+  .warn { font-size: .84rem; margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: #fff4e0; border: 1px solid #e6b45c; color: #5c3b00; }
+  .warn:empty { display: none; }
+  .guide { font-size: .86rem; }
+  .guide ul, .guide ol { padding-left: 1.3em; margin: 6px 0; }
+  .guide li { margin: 4px 0; }
+  .locked-panel { border: 1px dashed var(--locked); border-radius: 10px; padding: 16px; text-align: center; color: var(--muted); background: #fafbfd; }
+  .locked-panel .lead { color: var(--text); font-weight: bold; }
+  .locked-panel .feat-list { text-align: left; max-width: 600px; margin: 10px auto; font-size: .85rem; padding-left: 1.2em; }
+  .buy-btn { display: inline-block; margin-top: 8px; background: var(--hl); color: #fff; font-weight: bold; padding: 11px 22px; border-radius: 999px; text-decoration: none; font-size: .9rem; }
+  footer { max-width: 1040px; margin: 0 auto; padding: 0 16px 40px; font-size: .8rem; color: var(--muted); }
+  footer a { color: var(--muted); display: inline-block; padding: 10px 0; }
+  @media (max-width: 820px) {
+    .layout { grid-template-columns: minmax(0, 1fr); }
+    .layout > .col-pv { display: contents; }
+    #result-card { order: -1; position: sticky; top: 0; z-index: 5; margin-bottom: 0; padding: 10px 12px; box-shadow: 0 4px 12px rgba(0,0,0,.12); }
+    #result-card h2 { display: none; }
+    #result-card .preview { padding: 6px; }
+    #result-card .preview img { max-height: 34vh; }
+    #save-card { order: 2; }
+  }
+  @media (max-width: 600px) {
+    .row2 { flex-direction: column; gap: 0; }
+    section.card { padding: 16px 14px; }
+  }
+</style>
+<!--ANSHIN_CSS_START--><style>:root{--anshin-w:1008px;--anshin-pad:16px}.anshin-strip,.anshin{box-sizing:border-box;width:min(var(--anshin-w),calc(100% - 2 * var(--anshin-pad)));margin-left:auto;margin-right:auto}.anshin-strip{list-style:none;margin-top:10px;margin-bottom:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-size:.8rem;line-height:1.5}.anshin-strip li{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border:1px solid rgba(20,120,90,.45);border-radius:999px;background:rgba(20,120,90,.07)}.anshin-strip li.anshin-more{border:0;background:none;padding:3px 2px}.anshin-strip a,.anshin a{color:inherit}.anshin{margin-top:18px;margin-bottom:18px;padding:14px 18px;border:1px solid rgba(20,120,90,.45);border-radius:10px;background:rgba(20,120,90,.05);font-size:.86rem;line-height:1.7}.anshin h2{font-size:1rem;margin:0 0 6px}.anshin p{margin:0 0 6px}.anshin ul{margin:0;padding-left:1.2em}.anshin li{margin:3px 0}.anshin details{margin-top:6px}.anshin summary{cursor:pointer;font-weight:bold}.anshin .anshin-meta{margin:8px 0 0;font-size:.8rem;opacity:.85}@media print{.anshin,.anshin-strip{display:none!important}}</style><!--ANSHIN_CSS_END-->
+<!--UPSELL_CSS_START--><style>.upsell-top{box-sizing:border-box;width:min(var(--anshin-w,880px),calc(100% - 2 * var(--anshin-pad,16px)));margin:12px auto 0;font-size:.85rem;line-height:1.6}.upsell-top a{color:inherit}.upsell-assure{list-style:none;margin:12px 0 10px;padding:0;display:flex;flex-wrap:wrap;gap:6px 8px;font-size:.8rem;line-height:1.5}.upsell-assure li{padding:3px 10px;border:1px solid rgba(20,120,90,.45);border-radius:12px;background:rgba(20,120,90,.06)}.upsell-terms{margin:8px 0 0;font-size:.78rem;line-height:1.6;opacity:.85}.upsell-toast{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:9999;box-sizing:border-box;width:min(520px,calc(100% - 24px));padding:14px 56px 14px 16px;border-radius:12px;background:#fff;color:#222;border:1px solid #c9c2d6;box-shadow:0 6px 24px rgba(0,0,0,.18);font-size:.88rem;line-height:1.6}.upsell-toast p{margin:0 0 6px;font-weight:bold}.upsell-toast ul{margin:0 0 10px;padding-left:1.2em}.upsell-toast li{margin:2px 0}.upsell-toast .upsell-note{display:block;margin-top:6px;font-size:.75rem;color:#555}.upsell-toast .upsell-go{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:8px;background:#c9283e;color:#fff;font-weight:bold;text-decoration:none}.upsell-toast.upsell-calm .upsell-go{background:#3f4a63}.upsell-toast .upsell-go:focus-visible,.upsell-toast .upsell-x:focus-visible{outline:3px solid #2560c4;outline-offset:2px}.upsell-toast .upsell-x{position:absolute;top:4px;right:4px;width:44px;height:44px;border:0;border-radius:8px;background:transparent;color:#555;font-size:1.3rem;line-height:1;cursor:pointer}.upsell-inline{white-space:nowrap;color:inherit;text-decoration:underline;text-underline-offset:2px}@media print{.upsell-top,.upsell-assure,.upsell-terms,.upsell-toast,.upsell-inline{display:none!important}}</style><!--UPSELL_CSS_END-->
+<!--JSONLD_START--><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"集中線・吹き出しメーカー(無料の集中線・吹き出し作成ツール)","url":"https://uuhai0625.github.io/shuchusen-fukidashi/","description":"写真やイラストに集中線と漫画の吹き出しを無料で入れて画像(PNG)で保存(登録不要)。線の数・太さ・中心を調整、吹き出しは丸・トゲ・四角、縦書きにも対応。背景を透明にすれば集中線・吹き出しの透過PNG素材に。SNSの画像・動画のサムネイル・漫画に。","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","inLanguage":"ja","offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"},"author":{"@type":"Person","name":"uuhai0625","url":"https://uuhai0625.github.io/"}}</script><!--JSONLD_END-->
+</head>
+<body>
+
+<header>
+  <h1>集中線・吹き出しメーカー(無料の集中線・吹き出し作成ツール)</h1>
+  <p>写真やイラストに集中線と漫画の吹き出しを入れて、画像(PNG)で保存します。背景を透明にすれば、集中線や吹き出しだけの透過PNG素材にも。登録不要・ブラウザだけで使えます</p>
+</header>
+<!--ANSHIN_STRIP_START-->
+<ul class="anshin-strip" aria-label="データの扱い">
+  <li><span aria-hidden="true">✓</span> 入力内容はこの端末の中だけで処理</li>
+  <li><span aria-hidden="true">✓</span> 登録・ログイン不要</li>
+  <li><span aria-hidden="true">✓</span> 仕組みを公開中</li>
+  <li class="anshin-more"><a href="#anshin">データの扱いをくわしく</a></li>
+</ul>
+<!--ANSHIN_STRIP_END-->
+<!--UPSELL_TOP_START--><p class="upsell-top no-print" id="upsellTop">このページは無料のまま使えます。機能を増やしたい方は <a href="#pro-section">買い切り版(¥100・1回払い)<span aria-hidden="true"> ↓</span></a></p><!--UPSELL_TOP_END-->
+
+<main>
+<div class="layout">
+<div>
+
+  <section class="card" id="base-card">
+    <h2>① 背景と大きさ</h2>
+    <div class="row2">
+      <label class="field">
+        <span class="lbl">背景</span>
+        <select id="in-bgmode" data-save>
+          <option value="white" selected>白</option>
+          <option value="clear">透明(透過PNGの素材にする)</option>
+          <option value="image">写真・イラストの画像</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="lbl">大きさ</span>
+        <select id="in-size" data-save>
+          <option value="fit">画像に合わせる</option>
+          <option value="square" selected>正方形(1080×1080)</option>
+          <option value="post">縦長 4:5(1080×1350・Instagram/X)</option>
+          <option value="wide">横長 16:9(1920×1080・サムネイル)</option>
+          <option value="story">縦長 9:16(1080×1920・ストーリーズ)</option>
+          
+        </select>
+      </label>
+    </div>
+    <label class="field" id="imgField">
+      <span class="lbl">画像を選ぶ</span>
+      <input type="file" id="in-img" accept="image/png,image/jpeg,image/webp">
+      <span class="hint">画像はこのパソコン・スマホの中だけで使い、どこにも送りません(保存もしません)</span>
+    </label>
+    <div class="status" id="imgSt" role="status"></div>
+    <button class="btn link" type="button" id="resetAll">入力を全部消す</button>
+  </section>
+
+  <section class="card" id="line-card">
+    <h2>② 集中線</h2>
+    <label class="check"><input type="checkbox" id="in-lon" checked data-save> 集中線を入れる</label>
+    <div id="lineFields">
+      <label class="field">
+        <span class="lbl">線の色</span>
+        <select id="in-lcolor" data-save>
+          <option value="#000000" selected>黒</option>
+          <option value="#ffffff">白(暗い写真に)</option>
+          <option value="#d6334a">赤</option>
+          
+        </select>
+      </label>
+      
+      <div class="row2">
+        <label class="field"><span class="lbl">線の数<output id="o-count"></output></span><input type="range" id="in-count" min="40" max="400" step="10" value="160" data-save></label>
+        <label class="field"><span class="lbl">線の太さ<output id="o-thick"></output></span><input type="range" id="in-thick" min="1" max="30" step="1" value="8" data-save></label>
+      </div>
+      <div class="row2">
+        <label class="field"><span class="lbl">まん中の空き<output id="o-inner"></output></span><input type="range" id="in-inner" min="5" max="90" step="1" value="40" data-save></label>
+        <label class="field"><span class="lbl">長さのばらつき<output id="o-vari"></output></span><input type="range" id="in-vari" min="0" max="100" step="5" value="45" data-save></label>
+      </div>
+      <div class="row2">
+        <label class="field"><span class="lbl">中心の位置(左右)<output id="o-lx"></output></span><input type="range" id="in-lx" min="0" max="100" step="1" value="50" data-save></label>
+        <label class="field"><span class="lbl">中心の位置(上下)<output id="o-ly"></output></span><input type="range" id="in-ly" min="0" max="100" step="1" value="50" data-save></label>
+      </div>
+      <button class="btn" type="button" id="reseed">線の並びを変える</button>
+    </div>
+  </section>
+
+  <section class="card" id="bubble-card">
+    <h2>③ 吹き出し</h2>
+    <label class="check"><input type="checkbox" id="in-bon" checked data-save> 吹き出しを入れる</label>
+    <div id="bubbleFields">
+      <div class="tabs" id="bTabs" role="group" aria-label="編集する吹き出し"></div>
+      <div class="btn-row" style="margin-top:0;margin-bottom:10px;">
+        <button class="btn" type="button" id="bAdd">＋ 吹き出しを足す</button>
+        <button class="btn" type="button" id="bDel">この吹き出しを消す</button>
+      </div>
+      <div class="status" id="bSt" role="status"></div>
+      <label class="field">
+        <span class="lbl">セリフ</span>
+        <textarea id="b-text" maxlength="90" rows="3" placeholder="例: まさか…!?"></textarea>
+        <span class="hint">改行すると次の行(縦書きなら次の列)になります。6行・1行18文字まで</span>
+      </label>
+      <div class="row2">
+        <label class="field">
+          <span class="lbl">形</span>
+          <select id="b-shape">
+            <option value="round">丸(ふつうの会話)</option>
+            <option value="spike">トゲ(叫び・驚き)</option>
+            <option value="rect">四角(ナレーション)</option>
+            
+          </select>
+        </label>
+        <label class="field">
+          <span class="lbl">書き方</span>
+          <select id="b-vert">
+            <option value="0">横書き</option>
+            <option value="1">縦書き(漫画向け)</option>
+          </select>
+        </label>
+      </div>
+      <div class="row2">
+        <label class="field">
+          <span class="lbl">文字の種類</span>
+          <select id="b-font">
+            <option value="g">ゴシック(太字)</option>
+            <option value="m">明朝(太字)</option>
+          </select>
+        </label>
+        <label class="field"><span class="lbl">文字の大きさ<output id="o-fs"></output></span><input type="range" id="b-fs" min="24" max="200" step="2" value="72"></label>
+      </div>
+      <div class="row2">
+        <label class="field">
+          <span class="lbl">しっぽの向き<span class="hint" style="display:inline;margin-left:6px;">話す人の方向</span></span>
+          <select id="b-tail">
+            <option value="none">なし</option>
+            <option value="b">下</option>
+            <option value="bl" selected>左下</option>
+            <option value="br">右下</option>
+            <option value="l">左</option>
+            <option value="r">右</option>
+            <option value="t">上</option>
+            <option value="tl">左上</option>
+            <option value="tr">右上</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="lbl">しっぽの長さ</span>
+          <select id="b-tlen">
+            <option value="s">短い</option>
+            <option value="m" selected>ふつう</option>
+            <option value="l">長い</option>
+          </select>
+        </label>
+      </div>
+      <div class="row2">
+        <label class="field"><span class="lbl">位置(左右)<output id="o-bx"></output></span><input type="range" id="b-x" min="0" max="100" step="1" value="50"></label>
+        <label class="field"><span class="lbl">位置(上下)<output id="o-by"></output></span><input type="range" id="b-y" min="0" max="100" step="1" value="50"></label>
+      </div>
+      <div class="row2">
+        <label class="field">
+          <span class="lbl">吹き出しの色(全部の吹き出し)</span>
+          <select id="in-bcol" data-save>
+            <option value="w" selected>白地に黒い文字</option>
+            <option value="k">黒地に白い文字</option>
+            
+          </select>
+        </label>
+        <label class="field"><span class="lbl">ふちの太さ(全部の吹き出し)<output id="o-blw"></output></span><input type="range" id="in-blw" min="0" max="16" step="1" value="5" data-save></label>
+      </div>
+      
+    </div>
+  </section>
+
+</div>
+<div class="col-pv">
+  <section class="card" id="result-card">
+    <h2>見本</h2>
+    <div class="preview"><img id="pvImg" alt="集中線と吹き出しの見本" tabindex="-1"></div>
+    <fieldset class="place">
+      <legend>見本をクリック(タップ)した所へ:</legend>
+      <label><input type="radio" name="clickTo" value="bubble" checked> 吹き出しを動かす</label>
+      <label><input type="radio" name="clickTo" value="line"> 集中線の中心を動かす</label>
+    </fieldset>
+    <div class="status" id="clickSt" role="status"></div>
+  </section>
+  <section class="card" id="save-card">
+    <h2>④ 保存</h2>
+    <div class="warn" id="warn" aria-live="polite"></div>
+    <div class="info" id="info"></div>
+    <div class="btn-row">
+      <button class="btn primary" type="button" id="saveBtn">画像を保存(PNG)</button>
+    </div>
+    <div class="status" id="st" role="status"></div>
+    <ul class="fine" style="padding-left:1.2em;">
+      <li>背景を「透明」にすると、集中線や吹き出しだけの透過PNGになります(見本の市松模様の部分が透明)。CLIP STUDIO PAINTやアイビスペイントなどに画像として読み込んで重ねられます。</li>
+      <li>スマホは、見本の画像を長押しして保存することもできます(少し小さい画像になります)。</li>
+    </ul>
+  </section>
+</div>
+</div>
+
+  <section class="card" id="pro-section">
+    <h2>吹き出し5つで会話のやりとりも <span class="badge">買い切り版 ¥100(税込)</span></h2>
+    <div class="locked-panel">
+      <p class="lead">2人以上の会話を1枚に。もくもく・爆発の形や、漫画原稿の大きさでも保存できます。</p>
+      <p>このページの機能は無料でそのまま使えます(吹き出し1つ・画像は長い辺1600pxまで)。買い切り版(ダウンロード購入)では、次の機能が増えます:</p>
+      <ul class="feat-list">
+        <li><strong>吹き出しを5つまで</strong>(無料版は1つまで。会話のやりとり・ナレーションとセリフを1枚に)</li>
+        <li><strong>吹き出しの形が増える</strong>: もくもく(心の声)・爆発(大きな叫び)</li>
+        <li><strong>大きいサイズで保存</strong>: 漫画原稿B5・A4(塗り足し込み、350dpi・600dpi、解像度の情報つきのPNG)・4K。「画像に合わせる」は長い辺4096pxまで(無料版は1600pxまで)</li>
+        <li><strong>好きな色</strong>: 集中線の色、吹き出しの地・ふち・文字の色</li>
+        <li><strong>パソコンで使うHTMLファイルです</strong>(スマホでの動作は保証していません。スマホの方は、このページの無料版をお使いください)。ダブルクリックで開くだけ、ネットにつながっていなくても使えます</li>
+      </ul>
+      <p class="fine">※買い切り版はパソコン(Windows・Mac)用です。iPad・スマホでは使えません。</p>
+<!--UPSELL_ASSURE_START--><ul class="upsell-assure" aria-label="買い切り版について"><li>¥100(税込)の1回払い・月額なし</li><li>パソコン向けのHTMLファイル(スマホでは開けない機種あり)</li><li>ネットにつながっていなくても動く</li><li>BOOTHで購入(クレジットカード・楽天ペイは手数料なし、コンビニ・銀行払いは別途手数料)</li></ul><!--UPSELL_ASSURE_END-->
+      <a class="buy-btn" href="https://uuhai0625.booth.pm/items/9216339" id="buyLink" target="_blank" rel="noopener">買い切り版を見る(BOOTH・新しいタブ)</a><!--UPSELL_TERMS_START--><p class="upsell-terms">販売者の情報・返品などの販売条件は、BOOTHの商品ページでご確認ください。BOOTHでの購入にはpixivのアカウントが必要です。</p><!--UPSELL_TERMS_END-->
+    </div>
+  </section>
+
+  <section class="card guide" id="guide">
+    <h2>集中線・吹き出しの入れ方</h2>
+    <ol>
+      <li>①で背景を選びます。写真やイラストに入れるときは「写真・イラストの画像」にして画像を選び、大きさを「画像に合わせる」にします。素材だけ作るときは「透明」にします。</li>
+      <li>②で集中線の数・太さ・まん中の空きを決めます。見本をクリックすると、そこが集中線の中心になります(「集中線の中心を動かす」を選んだとき)。</li>
+      <li>③でセリフを入れ、形(丸・トゲ・四角など)と、しっぽの向きを選びます。見本をクリックすると、吹き出しがそこへ動きます。</li>
+      <li>「画像を保存(PNG)」で保存します。</li>
+    </ol>
+    <h2 style="margin-top:16px;">よくある疑問</h2>
+    <ul>
+      <li><strong>作った画像は自由に使えますか?</strong> 集中線と吹き出しは、SNSの投稿・同人誌・動画のサムネイル・お店のPOPなどに、商用でも自由に使えます(クレジットは要りません)。背景に入れる写真やイラストは、ご自身が使ってよいものをお使いください。</li>
+      <li><strong>漫画の原稿に使うには?</strong> 背景を「透明」にして保存し、原稿のファイルに画像として読み込みます。白黒の原稿は600dpiで描く人も多いので、原稿に使うときは原稿と同じ大きさ・解像度で保存すると線がきれいです(買い切り版は塗り足し込みのB5・A4の大きさで保存できます)。</li>
+      <li><strong>集中線の「まん中の空き」とは?</strong> 線が届かない、まん中の空白の広さです。顔や文字を見せたいところが空くように、中心の位置と一緒に決めます。</li>
+      <li><strong>入れた内容は?</strong> このブラウザの中だけで処理し、どこにも送信しません。次に開いたときのために、このブラウザに設定とセリフを残します(画像は残しません)。共用のパソコンでは、使い終わったら「入力を全部消す」を押してください。</li>
+    </ul>
+  </section>
+
+</main>
+
+<!--ANSHIN_START-->
+<section class="anshin" id="anshin" aria-labelledby="anshin-title">
+  <h2 id="anshin-title">データの扱いについて</h2>
+  <p>このページには、入力した内容を受け取る仕組みがありません。文字も画像も、あなたのスマホやパソコンの中だけで処理されます。</p>
+  <ul>
+    <li>画像などのファイルを選んでも、アップロードはされません。端末の中で読み込んで処理します。</li>
+    <li>会員登録・ログイン・メールアドレスの入力はありません。</li>
+    <li>自分で確かめたい方へ: ページを開いたあと機内モードにしても、そのまま使えます。</li>
+  </ul>
+  <details>
+    <summary>もっとくわしく(保存・アクセス解析・公開について)</summary>
+    <ul>
+      <li>保存されるデータは、この端末のこのブラウザの中にだけ残ります(localStorage・sessionStorage)。共用のパソコンでは使い終わったら消してください。</li>
+      <li>アクセス解析(Google Analytics)のため、見たページのURL・参照元・端末やブラウザの種類・おおよその地域(IPアドレスから推定)・Cookieの識別子・BOOTHへのリンクのクリック・どのボタンを押したか(回数や選んだ設定を含む)がGoogleに送られます。目的は利用状況の把握です。入力した文字や画像は送りません。(<a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener">Googleによるデータの使用</a>/<a href="https://tools.google.com/dlpage/gaoptout?hl=ja" target="_blank" rel="noopener">計測を止めるアドオン</a>。止めてもツールはそのまま使えます)</li>
+      <li>このツールの結果や作成物は目安です。入稿・契約・販売などの前には、印刷所や公式の情報でご確認ください。</li>
+      <li>処理の中身はすべて公開しています(詳しい方向け: <a href="https://github.com/uuhai0625/shuchusen-fukidashi" target="_blank" rel="noopener">GitHub</a>)。</li>
+    </ul>
+  </details>
+  <p class="anshin-meta">作っている人: ウーハイ(個人開発)/不具合・ご質問は<a href="https://x.com/uuhai0625" target="_blank" rel="noopener">X(@uuhai0625)</a>へ/<a href="https://uuhai0625.github.io/" target="_blank" rel="noopener">ほかのツール</a>/この説明の更新日: 2026-10-13</p>
+</section>
+<!--ANSHIN_END-->
+
+<footer>
+  <p id="privacyNote">本ツールは完全にブラウザ内で動作し、入力した内容はどこにも送信されません。</p>
+  <p><a href="https://uuhai0625.booth.pm/" target="_blank" rel="noopener">他のツールも見る(BOOTHショップ)</a></p>
+  <p>不具合・ご要望は X <a href="https://x.com/uuhai0625" target="_blank" rel="noopener">@uuhai0625</a> まで。</p>
+  <p class="related-tools no-print">関連する無料ツール: <a href="https://uuhai0625.github.io/koma-wari-template/" target="_blank" rel="noopener">漫画コマ割りテンプレートメーカー</a> ・ <a href="https://uuhai0625.github.io/tategaki-gazou/" target="_blank" rel="noopener">縦書き画像メーカー</a> ・ <a href="https://uuhai0625.github.io/watermark-maker/" target="_blank" rel="noopener">透かし入れツール</a> ・ <a href="https://uuhai0625.github.io/#free-tools">ツール一覧</a></p>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var EDITION = "free"; // "full" で買い切り完全版
+
+  function track(name, params) {
+    if (!window.dataLayer) return;
+    (function () { window.dataLayer.push(arguments); })("event", name, params || {});
+  }
+  var $ = function (id) { return document.getElementById(id); };
+  function el(tag, attrs, text) {
+    var e = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) { if (k === "class") e.className = attrs[k]; else e.setAttribute(k, attrs[k]); });
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function setSt(id, msg, err) { var e = $(id); e.textContent = msg; e.classList.toggle("err", !!err); }
+
+  var LAST_KEY = "shuchusen_last_v1";
+  var MAX_BUBBLES = 1, CAP = 1600, PV_MAX = 1100;
+  var SIZES = { square: [1080, 1080], post: [1080, 1350], wide: [1920, 1080], story: [1080, 1920], b5: [2591, 3624], b5hi: [4441, 6213], a4: [2976, 4176], k4: [3840, 2160] };
+  var GOTHIC = '"Hiragino Kaku Gothic ProN", "Yu Gothic", "YuGothic", "Meiryo", sans-serif';
+  var MINCHO = '"Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "MS PMincho", serif';
+  var TAIL = { b: 90, bl: 125, br: 55, l: 180, r: 0, t: 270, tl: 235, tr: 305 };
+  var TLEN = { s: 0.35, m: 0.7, l: 1.2 };
+  var LINES_MAX = 6, LINE_CHARS = 18;
+  var DPI = { b5: 350, b5hi: 600, a4: 350 };
+
+  // 買い切り版で差し替えるフック(無料版では何もしない)
+  var extendSettings = function (s) { return s; };
+  var syncExtra = function () {};
+
+  function clampInt(v, def, min, max) {
+    if (v === "" || v == null) return def;
+    v = Math.round(Number(v)); if (!isFinite(v)) v = def;
+    return Math.max(min, Math.min(max, v));
+  }
+  function optOk(sel, v) { return [].some.call(sel.options, function (o) { return o.value === v; }); }
+
+  // ===== 吹き出し =====
+  function newBubble(i) {
+    return { t: i ? "" : "まさか…!?", shape: i ? "round" : "spike", vert: 0, font: "g", fs: 72, tail: "bl", tlen: "m", x: i ? 30 : 62, y: i ? 70 : 30 };
+  }
+  var bubbles = [newBubble(0)], cur = 0;
+  function cleanText(v) {
+    return String(v == null ? "" : v).replace(/\r/g, "").split("\n").slice(0, LINES_MAX).map(function (l) { return Array.from(l.replace(/\s+$/, "")).slice(0, LINE_CHARS).join(""); }).join("\n");
+  }
+  function cleanBubbles(raw) {
+    if (!Array.isArray(raw) || !raw.length) return [newBubble(0)];
+    return raw.slice(0, MAX_BUBBLES).map(function (b, i) {
+      b = b && typeof b === "object" ? b : {};
+      var d = newBubble(i);
+      return {
+        t: typeof b.t === "string" ? cleanText(b.t) : d.t,
+        shape: typeof b.shape === "string" && optOk($("b-shape"), b.shape) ? b.shape : "round",
+        vert: b.vert === 1 || b.vert === "1" ? 1 : 0,
+        font: b.font === "m" ? "m" : "g",
+        fs: clampInt(b.fs, 72, 24, 200),
+        tail: typeof b.tail === "string" && (b.tail === "none" || TAIL.hasOwnProperty(b.tail)) ? b.tail : "bl",
+        tlen: typeof b.tlen === "string" && TLEN.hasOwnProperty(b.tlen) ? b.tlen : "m",
+        x: clampInt(b.x, d.x, 0, 100), y: clampInt(b.y, d.y, 0, 100)
+      };
+    });
+  }
+
+  // ===== 設定 =====
+  var bgImg = null, seed = 12345;
+  function settings() {
+    var size = $("in-size").value;
+    var mode = $("in-bgmode").value;
+    var W, H;
+    if (size === "fit" && bgImg && mode === "image") {
+      var k = Math.min(1, CAP / Math.max(bgImg.width, bgImg.height));
+      W = Math.max(1, Math.round(bgImg.width * k)); H = Math.max(1, Math.round(bgImg.height * k));
+    } else {
+      var sz = SIZES[size] && optOk($("in-size"), size) ? SIZES[size] : SIZES.square;
+      W = sz[0]; H = sz[1];
+    }
+    var bc = $("in-bcol").value === "k" ? { fill: "#111111", line: "#111111", text: "#ffffff" } : { fill: "#ffffff", line: "#111111", text: "#111111" };
+    var s = {
+      W: W, H: H, size: size, mode: mode === "clear" || mode === "image" ? mode : "white",
+      lon: $("in-lon").checked,
+      lcolor: /^#[0-9a-f]{6}$/i.test($("in-lcolor").value) ? $("in-lcolor").value : "#000000",
+      count: clampInt($("in-count").value, 160, 40, 400),
+      thick: clampInt($("in-thick").value, 8, 1, 30),
+      inner: clampInt($("in-inner").value, 40, 5, 90),
+      vari: clampInt($("in-vari").value, 45, 0, 100),
+      lx: clampInt($("in-lx").value, 50, 0, 100), ly: clampInt($("in-ly").value, 50, 0, 100),
+      bon: $("in-bon").checked, blw: clampInt($("in-blw").value, 5, 0, 16), bc: bc,
+      seed: seed, bubbles: bubbles, img: bgImg
+    };
+    return extendSettings(s);
+  }
+
+  // ===== 描く =====
+  function rng(a) {
+    return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  }
+  function rrect(ctx, x, y, w, h, r) {
+    r = Math.max(0, Math.min(r, w / 2, h / 2));
+    ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+
+  function drawLines(ctx, s, u) {
+    var W = s.W, H = s.H, cx = W * s.lx / 100, cy = H * s.ly / 100;
+    var R = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy)) * 1.15 + 10;
+    var rx = W / 2 * s.inner / 100, ry = H / 2 * s.inner / 100;
+    var r = rng(s.seed), n = s.count, vari = s.vari / 100;
+    ctx.fillStyle = s.lcolor;
+    for (var i = 0; i < n; i++) {
+      var a = (i + r() * 0.9) / n * Math.PI * 2;
+      var k = 1 + vari * Math.pow(r(), 1.6) * 1.1;
+      var ca = Math.cos(a), sa = Math.sin(a);
+      var tx = cx + rx * k * ca, ty = cy + ry * k * sa;
+      var w = s.thick * u * (0.4 + r() * 1.2) * 2.2;
+      var ox = cx + ca * R, oy = cy + sa * R;
+      ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(ox - sa * w, oy + ca * w); ctx.lineTo(ox + sa * w, oy - ca * w); ctx.closePath(); ctx.fill();
+    }
+  }
+
+  var ROT = "ー―‐-－−─〜～~…‥（）()「」『』【】〈〉《》［］[]｛｝{}〔〕＜＞<>＝=→←：；:;";
+  var SMALL = "ぁぃぅぇぉっゃゅょゎゕゖァィゥェォッャュョヮヵヶ";
+  function textBox(ctx, b, px) {
+    var lines = b.t ? b.t.split("\n") : [""];
+    if (b.vert) {
+      var maxLen = 1; lines.forEach(function (l) { maxLen = Math.max(maxLen, Array.from(l).length); });
+      return { lines: lines, w: lines.length * px * 1.25 - px * 0.25, h: maxLen * px * 1.02 };
+    }
+    var mw = px; lines.forEach(function (l) { mw = Math.max(mw, ctx.measureText(l).width); });
+    return { lines: lines, w: mw, h: lines.length * px * 1.25 - px * 0.25 };
+  }
+  function drawText(ctx, b, box, cx, cy, px) {
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    if (!b.vert) {
+      var lh = px * 1.25;
+      box.lines.forEach(function (l, i) { ctx.fillText(l, cx, cy - (box.lines.length - 1) * lh / 2 + i * lh); });
+      return;
+    }
+    var colW = px * 1.25, x0 = cx + box.w / 2 - px / 2, top = cy - box.h / 2;
+    box.lines.forEach(function (l, ci) {
+      var x = x0 - ci * colW;
+      Array.from(l.replace(/[!！][?？]/g, "⁉").replace(/[!！]{2}/g, "‼").replace(/[?？]{2}/g, "⁇").replace(/[?？][!！]/g, "⁈").replace(/!/g, "！").replace(/\?/g, "？").replace(/[“"]/g, "〝").replace(/”/g, "〟")).forEach(function (ch, j) {
+        var y = top + (j + 0.5) * px * 1.02;
+        if (ROT.indexOf(ch) >= 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(Math.PI / 2); ctx.fillText(ch, 0, 0); ctx.restore(); }
+        else if ("、。，．".indexOf(ch) >= 0) ctx.fillText(ch, x + px * 0.55, y - px * 0.5);
+        else if (SMALL.indexOf(ch) >= 0) ctx.fillText(ch, x + px * 0.14, y - px * 0.18);
+        else ctx.fillText(ch, x, y);
+      });
+    });
+  }
+  // 形ごとの外側の倍率(しっぽの先を決めるのに使う)
+  var REACH = { round: 1, rect: 1, spike: 1.22, cloud: 1.22, burst: 1.55 };
+  function shapePath(ctx, shape, cx, cy, rx, ry, r) {
+    ctx.beginPath();
+    if (shape === "rect") { rrect(ctx, cx - rx, cy - ry, rx * 2, ry * 2, Math.min(rx, ry) * 0.12); return; }
+    if (shape === "round") { ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); return; }
+    var i, n, a;
+    if (shape === "spike" || shape === "burst") {
+      n = shape === "spike" ? 22 : 13;
+      for (i = 0; i < n * 2; i++) {
+        a = (i + (r() - 0.5) * 0.5) / (n * 2) * Math.PI * 2;
+        var k = i % 2 ? 0.98 : (shape === "spike" ? 1.18 + r() * 0.1 : 1.35 + r() * 0.35);
+        var px = cx + rx * k * Math.cos(a), py = cy + ry * k * Math.sin(a);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.closePath(); return;
+    }
+    // cloud: 外にふくらむ弧をつなぐ
+    var per = Math.PI * (3 * (rx + ry) - Math.sqrt((3 * rx + ry) * (rx + 3 * ry)));
+    n = Math.max(9, Math.min(24, Math.round(per / (Math.min(rx, ry) * 0.85))));
+    var pts = [];
+    for (i = 0; i < n; i++) { a = (i + (r() - 0.5) * 0.3) / n * Math.PI * 2; pts.push(a); }
+    ctx.moveTo(cx + rx * Math.cos(pts[0]), cy + ry * Math.sin(pts[0]));
+    for (i = 0; i < n; i++) {
+      var a0 = pts[i], a1 = i + 1 < n ? pts[i + 1] : pts[0] + Math.PI * 2, m = (a0 + a1) / 2;
+      var d = Math.min(rx, ry) * 0.42; ctx.quadraticCurveTo(cx + (rx + d) * Math.cos(m), cy + (ry + d) * Math.sin(m), cx + rx * Math.cos(a1), cy + ry * Math.sin(a1));
+    }
+    ctx.closePath();
+  }
+  function edgeR(shape, rx, ry, a) {
+    var c = Math.cos(a), sn = Math.sin(a);
+    if (shape === "rect") return Math.min(Math.abs(c) > 1e-6 ? rx / Math.abs(c) : 1e9, Math.abs(sn) > 1e-6 ? ry / Math.abs(sn) : 1e9);
+    return rx * ry / Math.sqrt(Math.pow(ry * c, 2) + Math.pow(rx * sn, 2)) * REACH[shape];
+  }
+
+  function drawBubble(ctx, s, b, idx, u) {
+    var px = b.fs * u;
+    ctx.font = "bold " + Math.max(1, Math.round(px)) + "px " + (b.font === "m" ? MINCHO : GOTHIC);
+    var box = textBox(ctx, b, px);
+    var cx = s.W * b.x / 100, cy = s.H * b.y / 100;
+    var rx, ry;
+    if (b.shape === "rect") { rx = box.w / 2 + px * 0.8; ry = box.h / 2 + px * 0.6; }
+    else { rx = box.w / 2 * 1.42 + px * 0.45; ry = box.h / 2 * 1.42 + px * 0.45; }
+    if (b.shape === "cloud") { rx *= 0.92; ry *= 0.92; }
+    var lw = s.blw * u;
+    // 形の乱数は毎回同じ並びにする(ふちと塗りで同じ形になるように)
+    function sp() { shapePath(ctx, b.shape, cx, cy, rx, ry, rng(s.seed + idx * 7919 + 1)); }
+    ctx.lineJoin = b.shape === "spike" || b.shape === "burst" ? "miter" : "round"; ctx.miterLimit = 6;
+    var tail = null, dots = null;
+    if (b.tail !== "none") {
+      var a = TAIL[b.tail] * Math.PI / 180, ca = Math.cos(a), sa = Math.sin(a), mr = Math.min(rx, ry);
+      var reach = edgeR(b.shape, rx, ry, a) + mr * TLEN[b.tlen] + px * 0.3;
+      if (b.shape === "cloud") {
+        dots = [0.25, 0.6, 1].map(function (f, j) { var d = edgeR("cloud", rx, ry, a) + (reach - edgeR("cloud", rx, ry, a)) * f; return { x: cx + ca * d, y: cy + sa * d, r: mr * (0.2 - j * 0.055) }; });
+      } else {
+        var bw = mr * 0.2;
+        tail = [[cx - sa * bw, cy + ca * bw], [cx + ca * reach, cy + sa * reach], [cx + sa * bw, cy - ca * bw]];
+      }
+    }
+    function tailPath() { ctx.beginPath(); ctx.moveTo(tail[0][0], tail[0][1]); ctx.lineTo(tail[1][0], tail[1][1]); ctx.lineTo(tail[2][0], tail[2][1]); ctx.closePath(); }
+    // ふち→塗りの順で、しっぽと本体のつなぎ目の線を消す
+    if (lw > 0) {
+      ctx.strokeStyle = s.bc.line; ctx.lineWidth = lw * 2;
+      sp(); ctx.stroke();
+      if (tail) { tailPath(); ctx.stroke(); }
+    }
+    ctx.fillStyle = s.bc.fill;
+    sp(); ctx.fill();
+    if (tail) { tailPath(); ctx.fill(); }
+    if (dots) dots.forEach(function (d) {
+      ctx.beginPath(); ctx.arc(d.x, d.y, Math.max(d.r, 2 * u), 0, Math.PI * 2);
+      if (lw > 0) { ctx.lineWidth = lw; ctx.strokeStyle = s.bc.line; ctx.stroke(); }
+      ctx.fill();
+    });
+    ctx.fillStyle = s.bc.text;
+    drawText(ctx, b, box, cx, cy, px);
+    var q = REACH[b.shape] + 0.03;
+    return { x0: cx - rx * q, x1: cx + rx * q, y0: cy - ry * q, y1: cy + ry * q };
+  }
+
+  // k: 実際の大きさに対する倍率(見本は小さく描く)
+  function draw(cv, s, k, info) {
+    cv.width = Math.max(1, Math.round(s.W * k)); cv.height = Math.max(1, Math.round(s.H * k));
+    var ctx = cv.getContext("2d");
+    if (!ctx) throw new Error("no canvas");
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.clearRect(0, 0, s.W, s.H);
+    if (s.mode === "white" || (s.mode === "image" && !s.img)) { ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, s.W, s.H); }
+    if (s.mode === "image" && s.img) {
+      var iw = s.img.width, ih = s.img.height, c = Math.max(s.W / iw, s.H / ih);
+      ctx.drawImage(s.img, (s.W - iw * c) / 2, (s.H - ih * c) / 2, iw * c, ih * c);
+    }
+    var u = Math.min(s.W, s.H) / 1080;
+    if (s.lon) drawLines(ctx, s, u);
+    var out = 0;
+    if (s.bon) s.bubbles.forEach(function (b, i) {
+      var bb = drawBubble(ctx, s, b, i, u);
+      if (bb.x0 < 0 || bb.y0 < 0 || bb.x1 > s.W || bb.y1 > s.H) out++;
+    });
+    if (info) info.out = out;
+    return cv;
+  }
+
+  // ===== 画面 =====
+  var last = null, rTimer = null, pvUrl = null, pvBusy = false, pvAgain = false;
+  var pvCv = document.createElement("canvas");
+  function outputs() {
+    [["in-count", "o-count", "本"], ["in-thick", "o-thick", "px"], ["in-inner", "o-inner", "%"], ["in-vari", "o-vari", "%"], ["in-lx", "o-lx", "%"], ["in-ly", "o-ly", "%"], ["b-fs", "o-fs", "px"], ["b-x", "o-bx", "%"], ["b-y", "o-by", "%"], ["in-blw", "o-blw", "px"]].forEach(function (a) {
+      var o = $(a[1]); if (o) o.textContent = $(a[0]).value + a[2];
+    });
+  }
+  function render() {
+    rTimer = null;
+    var s = settings();
+    syncExtra(s); saveLast(); outputs();
+    $("imgField").classList.toggle("hidden", s.mode !== "image");
+    $("lineFields").classList.toggle("hidden", !s.lon);
+    $("bubbleFields").classList.toggle("hidden", !s.bon);
+    var info = {};
+    var k = Math.min(1, PV_MAX / Math.max(s.W, s.H));
+    try { draw(pvCv, s, k, info); }
+    catch (e) { last = null; setSt("st", "見本の画像を作れませんでした(画像が大きすぎるか、メモリが足りない可能性があります)。", true); return; }
+    if ($("st").classList.contains("err")) setSt("st", "");
+    if (pvBusy) pvAgain = true;
+    else {
+      pvBusy = true;
+      pvCv.toBlob(function (bl) {
+        pvBusy = false;
+        if (bl) { var old = pvUrl; pvUrl = URL.createObjectURL(bl); $("pvImg").src = pvUrl; if (old) setTimeout(function () { URL.revokeObjectURL(old); }, 1000); }
+        if (pvAgain) { pvAgain = false; render(); }
+      }, "image/png");
+    }
+    var w = [];
+    if (s.mode === "image" && !s.img) w.push("①で画像を選んでください(今は白い背景で表示しています)。");
+    if (s.size === "fit" && !(s.mode === "image" && s.img)) w.push("「画像に合わせる」は画像を選んだときに使えます(今は正方形)。");
+    if (info.out) w.push("吹き出しが画像の外にはみ出しています。位置か文字の大きさを変えてください。");
+    if (!s.lon && !hasText(s)) w.push("集中線もセリフも入っていません。");
+    $("warn").textContent = w.length ? "⚠ " + w.join(" ") : "";
+    var msg = "保存する画像は " + s.W + "×" + s.H + "px" + (s.mode === "clear" ? "(背景は透明)" : "") + "です。";
+    if (s.size === "fit" && s.mode === "image" && s.img && Math.max(s.img.srcW, s.img.srcH) > CAP) msg += EDITION === "full" ? "元の画像は長い辺4096pxに縮めて使っています。" : "無料版は長い辺1600pxまでに縮めて保存します(買い切り版は4096pxまで)。";
+    $("info").textContent = msg;
+    $("pvImg").alt = "集中線と吹き出しの見本。" + msg;
+    last = s;
+  }
+  function changed() { clearTimeout(rTimer); rTimer = setTimeout(render, 60); }
+  function hasText(s) { return s.bon && s.bubbles.some(function (b) { return b.t.trim() !== ""; }); }
+  function flush() { if (rTimer) { clearTimeout(rTimer); render(); } }
+
+  // PNGに解像度(pHYs)を書き込む(漫画原稿の大きさのとき)
+  var CRC = null;
+  function crc32(u8) {
+    if (!CRC) { CRC = []; for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; CRC[n] = c >>> 0; } }
+    var x = 0xFFFFFFFF; for (var i = 0; i < u8.length; i++) x = CRC[(x ^ u8[i]) & 255] ^ (x >>> 8);
+    return (x ^ 0xFFFFFFFF) >>> 0;
+  }
+  function withDpi(blob, dpi, done) {
+    if (!dpi || !blob.arrayBuffer) { done(blob); return; }
+    blob.arrayBuffer().then(function (buf) {
+      var src = new Uint8Array(buf), ppm = Math.round(dpi / 0.0254);
+      var ch = new Uint8Array(21), dv = new DataView(ch.buffer);
+      dv.setUint32(0, 9); ch.set([112, 72, 89, 115], 4); dv.setUint32(8, ppm); dv.setUint32(12, ppm); ch[16] = 1;
+      dv.setUint32(17, crc32(ch.subarray(4, 17)));
+      // シグネチャ8+IHDR25の直後に入れる
+      done(new Blob([src.subarray(0, 33), ch, src.subarray(33)], { type: "image/png" }));
+    }).catch(function () { done(blob); });
+  }
+  var saving = false;
+  $("saveBtn").addEventListener("click", function () {
+    flush(); if (!last || saving) return;
+    var s = last, cv = document.createElement("canvas"), btn = this;
+    saving = true; btn.disabled = true;
+    function end() { saving = false; btn.disabled = false; cv.width = cv.height = 0; }
+    setSt("st", "画像を作っています…");
+    try { draw(cv, s, 1, {}); } catch (e) { end(); setSt("st", "画像を作れませんでした(大きすぎてメモリが足りない可能性があります)。", true); return; }
+    cv.toBlob(function (b0) {
+      if (!b0) { end(); setSt("st", "画像を作れませんでした(大きすぎてメモリが足りない可能性があります)。", true); return; }
+      withDpi(b0, DPI[s.size], function (b) {
+        end();
+        var a = document.createElement("a"), url = URL.createObjectURL(b), tx = hasText(s);
+        a.href = url; a.download = (s.lon && !tx ? "shuchusen" : s.lon ? "shuchusen_fukidashi" : "fukidashi") + "_" + s.W + "x" + s.H + ".png";
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+        setSt("st", "画像を保存しました(パソコンは「ダウンロード」のフォルダ、iPhoneは「ファイル」アプリのダウンロード)。" + (DPI[s.size] ? "解像度" + DPI[s.size] + "dpiの情報つきです。" : ""));
+      });
+    }, "image/png");
+    track("shuchusen_save", { lines: s.lon ? s.count : 0, bubbles: s.bon ? s.bubbles.length : 0, shape: s.bon && s.bubbles[0] ? s.bubbles[0].shape : "none", size: s.size, bg: s.mode });
+  });
+
+  // 見本をクリック(マウスはドラッグも)→吹き出し/集中線の中心を動かす
+  function moveTo(e) {
+    var r = $("pvImg").getBoundingClientRect();
+    if (!r.width || !r.height) return;
+    var x = clampInt((e.clientX - r.left) / r.width * 100, 50, 0, 100), y = clampInt((e.clientY - r.top) / r.height * 100, 50, 0, 100);
+    var to = document.querySelector('input[name=clickTo]:checked').value;
+    if (to === "line") {
+      if (!$("in-lon").checked) { setSt("clickSt", "②で「集中線を入れる」にすると、中心を動かせます。"); return; }
+      $("in-lx").value = x; $("in-ly").value = y;
+    } else {
+      if (!$("in-bon").checked) { setSt("clickSt", "③で「吹き出しを入れる」にすると、吹き出しを動かせます。"); return; }
+      bubbles[cur].x = x; bubbles[cur].y = y; $("b-x").value = x; $("b-y").value = y;
+    }
+    setSt("clickSt", "");
+    changed();
+  }
+  var dragging = false;
+  $("pvImg").addEventListener("dragstart", function (e) { e.preventDefault(); });
+  $("pvImg").addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse" || e.button !== 0) return; dragging = true; moveTo(e); });
+  window.addEventListener("pointermove", function (e) { if (dragging) moveTo(e); });
+  window.addEventListener("pointerup", function () { dragging = false; });
+  $("pvImg").addEventListener("click", function (e) { if (e.pointerType === "mouse") return; moveTo(e); });
+
+  // ===== 吹き出しの入力欄 =====
+  function bubbleUi(focusTab) {
+    var tabs = $("bTabs"); tabs.innerHTML = "";
+    if (cur >= bubbles.length) cur = bubbles.length - 1;
+    bubbles.forEach(function (b, i) {
+      var t = el("button", { class: "btn small", type: "button", "aria-pressed": i === cur ? "true" : "false" }, "吹き出し" + (i + 1));
+      t.addEventListener("click", function () { cur = i; bubbleUi(true); });
+      tabs.appendChild(t);
+    });
+    tabs.classList.toggle("hidden", bubbles.length < 2);
+    $("bDel").classList.toggle("hidden", bubbles.length < 2);
+    var b = bubbles[cur];
+    $("b-text").value = b.t; $("b-shape").value = b.shape; $("b-vert").value = String(b.vert); $("b-font").value = b.font;
+    $("b-fs").value = b.fs; $("b-tail").value = b.tail; $("b-tlen").value = b.tlen; $("b-x").value = b.x; $("b-y").value = b.y;
+    if (focusTab) { var p = tabs.querySelector('[aria-pressed="true"]'); if (p) p.focus(); }
+    outputs();
+  }
+  function readBubble(e) {
+    var b = bubbles[cur], raw = $("b-text").value.replace(/\r/g, "");
+    b.t = cleanText(raw);
+    setSt("bSt", b.t !== raw.split("\n").map(function (l) { return l.replace(/\s+$/, ""); }).join("\n") ? "セリフは6行・1行18文字までです(はみ出した分は画像に入りません)。長い行は改行で分けてください。" : "", false);
+    if (e && e.target && e.target.id === "b-shape" && $("b-shape").value === "rect" && b.tail !== "none") { $("b-tail").value = "none"; }
+    b.shape = optOk($("b-shape"), $("b-shape").value) ? $("b-shape").value : "round";
+    b.vert = $("b-vert").value === "1" ? 1 : 0;
+    b.font = $("b-font").value === "m" ? "m" : "g";
+    b.fs = clampInt($("b-fs").value, 72, 24, 200);
+    b.tail = $("b-tail").value; b.tlen = $("b-tlen").value;
+    b.x = clampInt($("b-x").value, 50, 0, 100); b.y = clampInt($("b-y").value, 50, 0, 100);
+    changed();
+  }
+  ["b-text", "b-fs", "b-x", "b-y"].forEach(function (id) { $(id).addEventListener("input", readBubble); });
+  ["b-shape", "b-vert", "b-font", "b-tail", "b-tlen"].forEach(function (id) { $(id).addEventListener("change", readBubble); });
+  $("b-text").addEventListener("change", function () { var v = cleanText(this.value); if (v !== this.value) this.value = v; });
+  $("bAdd").addEventListener("click", function () {
+    if (bubbles.length >= MAX_BUBBLES) {
+      setSt("bSt", EDITION === "full" ? "吹き出しは" + MAX_BUBBLES + "つまでです。" : "無料版は吹き出し1つまでです。買い切り版なら5つまで入れられます。", true);
+      return;
+    }
+    setSt("bSt", "");
+    var nb = newBubble(bubbles.length); nb.shape = "round"; nb.t = "";
+    bubbles.push(nb); cur = bubbles.length - 1; bubbleUi(); changed(); $("b-text").focus();
+  });
+  $("bDel").addEventListener("click", function () {
+    if (bubbles.length < 2) return;
+    bubbles.splice(cur, 1); cur = Math.max(0, cur - 1); setSt("bSt", ""); bubbleUi(true); changed();
+  });
+  $("reseed").addEventListener("click", function () { seed = (Math.random() * 2147483647) | 0; changed(); });
+
+  // ===== 画像の読み込み =====
+  var imgToken = 0;
+  $("in-img").addEventListener("change", function () {
+    var f = this.files && this.files[0], input = this;
+    if (!f) return;
+    if (!/^image\/(png|jpeg|webp)$/.test(f.type)) { setSt("imgSt", "画像ファイル(JPEG・PNG・WebP)を選んでください。", true); input.value = ""; return; }
+    if (f.size > 40 * 1024 * 1024) { setSt("imgSt", "画像が大きすぎます(40MBまで)。", true); input.value = ""; return; }
+    var token = ++imgToken, url = URL.createObjectURL(f), im = new Image();
+    setSt("imgSt", "画像を読み込んでいます…");
+    im.onload = function () {
+      URL.revokeObjectURL(url);
+      if (token !== imgToken) return;
+      if (im.naturalWidth * im.naturalHeight > 40000000) { setSt("imgSt", "画像の画素数が大きすぎます(4000万画素まで)。", true); input.value = ""; return; }
+      var k = Math.min(1, CAP / Math.max(im.naturalWidth, im.naturalHeight, 1));
+      try {
+        var cv = document.createElement("canvas");
+        cv.width = Math.max(1, Math.round(im.naturalWidth * k)); cv.height = Math.max(1, Math.round(im.naturalHeight * k));
+        cv.getContext("2d").drawImage(im, 0, 0, cv.width, cv.height);
+        bgImg = cv; bgImg.srcW = im.naturalWidth; bgImg.srcH = im.naturalHeight;
+      } catch (e) { setSt("imgSt", "画像が大きすぎて読み込めませんでした。", true); input.value = ""; return; }
+      if ($("in-size").value !== "fit") $("in-size").value = "fit";
+      setSt("imgSt", "画像を読み込みました。");
+      render();
+    };
+    im.onerror = function () { URL.revokeObjectURL(url); if (token !== imgToken) return; setSt("imgSt", "画像を読み込めませんでした(壊れているか、対応していない形式です)。", true); input.value = ""; };
+    im.src = url;
+  });
+  $("in-bgmode").addEventListener("change", function () { if (this.value === "image" && !bgImg) setTimeout(function () { $("in-img").focus(); }, 0); });
+
+  // ===== 設定の記憶(このブラウザだけ。画像は残さない) =====
+  var noSave = false;
+  function snapshot() {
+    var o = {};
+    document.querySelectorAll("[data-save]").forEach(function (e) { o[e.id] = e.type === "checkbox" ? e.checked : e.value; });
+    o.bubbles = bubbles; o.seed = seed;
+    return o;
+  }
+  function applySnap(o) {
+    if (!o || typeof o !== "object") return;
+    document.querySelectorAll("[data-save]").forEach(function (e) {
+      if (e.type === "checkbox") { if (typeof o[e.id] === "boolean") e.checked = o[e.id]; return; }
+      if (typeof o[e.id] !== "string") return;
+      var v = o[e.id].slice(0, 16);
+      if (e.tagName === "SELECT" && !optOk(e, v)) return;
+      if (e.type === "color" && !/^#[0-9a-f]{6}$/i.test(v)) return;
+      if (e.type === "range" && !isFinite(Number(v))) return;
+      e.value = v;
+    });
+    if (o.bubbles) bubbles = cleanBubbles(o.bubbles);
+    if (typeof o.seed === "number" && isFinite(o.seed)) seed = o.seed | 0;
+  }
+  function saveNow() { if (noSave) return; try { localStorage.setItem(LAST_KEY, JSON.stringify(snapshot())); } catch (e) {} }
+  var saveTimer = null;
+  function saveLast() { clearTimeout(saveTimer); saveTimer = setTimeout(saveNow, 300); }
+  window.addEventListener("pagehide", function () { if (rTimer) flush(); saveNow(); });
+
+  document.querySelectorAll("[data-save]").forEach(function (e) {
+    e.addEventListener(e.type === "range" || e.type === "color" ? "input" : "change", changed);
+  });
+  $("resetAll").addEventListener("click", function () {
+    if (!window.confirm("入力した内容を全部消して、最初の状態に戻します。よろしいですか?")) return;
+    noSave = true;
+    try { localStorage.removeItem(LAST_KEY); } catch (e) {}
+    location.reload();
+  });
+
+  
+
+  try { applySnap(JSON.parse(localStorage.getItem(LAST_KEY) || "null")); } catch (e) {}
+  bubbles = cleanBubbles(bubbles);
+  if ($("in-size").value === "fit") $("in-size").value = "square";
+  if ($("in-bgmode").value === "image") $("in-bgmode").value = "white";
+  if (EDITION !== "full") {
+    $("privacyNote").innerHTML = '入力した内容はどこにも送信されません(すべてこのブラウザの中で処理します)。このページでは利用状況の把握のためにアクセス解析(Google Analytics)を使っています。<a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener">Googleによるデータの使用について</a>';
+  }
+  bubbleUi();
+  render();
+})();
+</script>
+<!--UPSELL_JS_START-->
+<script>
+(function () {
+  "use strict";
+  var q = new URLSearchParams(location.search);
+  if (q.get("obs") === "1" || document.documentElement.classList.contains("obs")) return;
+  // 小さな案内(トースト)は、買い切り版がパソコン向けなので、マウス操作の広い画面でだけ出す
+  var pc = !!(window.matchMedia && matchMedia("(pointer:fine) and (min-width:720px)").matches);
+  var buy = document.getElementById("buyLink");
+  var pro = document.getElementById("pro-section");
+  if (!buy || !pro) return;
+  var FEATS = [], CALM = false;
+  var path = location.pathname.replace(/index\.html$/, "");
+  var KEY_CLOSED = "upsell_closed_until:" + path, KEY_SHOWN = "upsell_shown:" + path;
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+  function sess(k, v) { try { if (v === undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k, v); } catch (e) { return null; } }
+  function gtagEv(name, p) { if (!window.dataLayer) return; (function () { window.dataLayer.push(arguments); })("event", name, p || {}); }
+
+  var shown = false;
+  function blocked() {
+    if (shown || sess(KEY_SHOWN) === "1") return true;
+    var until = Number(store(KEY_CLOSED) || 0);
+    return until && Date.now() < until;
+  }
+  function feats() {
+    if (FEATS.length) return FEATS;
+    var out = [];
+    var lis = pro.querySelectorAll(".feat-list li");
+    for (var i = 0; i < lis.length && out.length < 3; i++) {
+      var all = lis[i].textContent.replace(/\s+/g, " ").trim();
+      if (/スマホ|HTMLファイル|パソコンで使う/.test(all)) continue;
+      var st = lis[i].querySelectorAll("strong");
+      var t = st.length === 1 ? st[0].textContent : all.split(/[::。]/)[0];
+      t = t.replace(/[((][^()()]*[))]/g, "").replace(/\s+/g, " ").trim();
+      if (t.length > 40) t = t.slice(0, 39) + "…";
+      if (t) out.push(t);
+    }
+    return out;
+  }
+  // 「〜してください」「できません」など、失敗の表示が出ていたら案内しない
+  function failed() {
+    var els = document.querySelectorAll('[role="status"], [role="alert"], [aria-live]');
+    for (var i = 0; i < els.length; i++) {
+      if (pro.contains(els[i]) || !els[i].offsetParent) continue;
+      if (/ください|できません|できませんでした|失敗|ありません|エラー/.test(els[i].textContent)) return true;
+    }
+    return false;
+  }
+  function proVisible() {
+    var r = pro.getBoundingClientRect();
+    return r.top < innerHeight && r.bottom > 0;
+  }
+  function show(trigger) {
+    if (!pc || blocked() || (trigger === "action" && failed()) || proVisible()) return;
+    var list = feats();
+    if (!list.length) return;
+    shown = true;
+    sess(KEY_SHOWN, "1");
+    var box = document.createElement("aside");
+    box.className = "upsell-toast" + (CALM ? " upsell-calm" : "");
+    box.setAttribute("aria-label", "買い切り版のご案内");
+    box.setAttribute("aria-live", "polite");
+    document.body.appendChild(box);
+    var p = document.createElement("p");
+    p.textContent = trigger === "limit" && CALM ? "件数が多いときは、パソコン用の買い切り版(¥100・税込)で続けられます:"
+      : trigger === "limit"
+      ? "この先は買い切り版の機能です。パソコン用の買い切り版(¥100・税込)なら:"
+      : CALM ? "件数が多いときや、香典返しの準備をまとめたいときのために、パソコン用の買い切り版(¥100・税込)もあります:" : "うまくできましたか? パソコン用の買い切り版(¥100・税込)なら、さらに:";
+    var ul = document.createElement("ul");
+    list.forEach(function (t) { var li = document.createElement("li"); li.textContent = t; ul.appendChild(li); });
+    var a = document.createElement("a");
+    a.className = "upsell-go";
+    a.id = "upsellToastLink";
+    a.href = buy.href;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = "BOOTHで見る(新しいタブ)";
+    var bg = getComputedStyle(buy).backgroundColor;
+    if (bg && !/rgba?\(0, 0, 0, 0\)|transparent/.test(bg)) a.style.background = bg;
+    var x = document.createElement("button");
+    x.type = "button";
+    x.className = "upsell-x";
+    x.setAttribute("aria-label", "この案内を閉じる");
+    x.textContent = "×";
+    function close(remember) {
+      if (box.parentNode) box.parentNode.removeChild(box);
+      document.removeEventListener("keydown", onKey);
+      if (remember) store(KEY_CLOSED, String(Date.now() + 7 * 864e5));
+    }
+    // Escはページ側の操作(選択解除など)にも使われるので、案内の中にフォーカスがある時だけ閉じる
+    function onKey(e) { if (e.key === "Escape" && box.contains(document.activeElement)) close(true); }
+    x.addEventListener("click", function () { close(true); });
+    a.addEventListener("click", function () { setTimeout(function () { close(false); }, 0); });
+    document.addEventListener("keydown", onKey);
+    setTimeout(function () {
+      var note = document.createElement("small");
+      note.className = "upsell-note";
+      note.textContent = "スマホではファイルを開けない機種があります";
+      box.appendChild(x); box.appendChild(p); box.appendChild(ul); box.appendChild(a); box.appendChild(note);
+    }, 50);
+    gtagEv("upsell_show", { trigger: trigger });
+  }
+
+  // 保存・コピー・印刷・書き出しを押した直後(結果を受け取れたタイミング)
+  var OK = /保存|コピー|印刷|書き出|ダウンロード|共有|PDF/;
+  var NG = /読み込|リセット|消|削除|このブラウザに保存|確認|イメージを見る|戻/;
+  document.addEventListener("click", function (e) {
+    var el = e.target && e.target.closest ? e.target.closest("button, a[download], input[type=button], input[type=submit]") : null;
+    if (!el || el.closest("#pro-section, .upsell-toast, #anshin")) return;
+    var label = (el.textContent || el.value || "").replace(/\s+/g, " ");
+    if (!OK.test(label) || NG.test(label)) return;
+    setTimeout(function () { show("action"); }, 1500);
+  }, true);
+
+  // 無料版の上限まわり
+  // (1) ページが出す「買い切り版」の一文に、購入欄へのリンクを足す(スマホでも)。🔒のタブは薄く表示されているので入れない
+  // (2) 案内(パソコンのみ)は、はっきりした合図のときだけ出す: 🔒のクリック・買い切り版にふれたalert・
+  //     初めて出た「〜まで/のみ/以降/入っていません」の上限の一文(計算のたびに出る誘導文や、同じ文の描き直しでは出さない)
+  var SKIP = "#pro-section, .upsell-toast, .upsell-top, #anshin, a, button, label, select, option, h1, h2, h3, .badge, header, footer, nav, textarea, pre, code, [contenteditable], svg";
+  var LIMIT = /まで|のみ|以降|入っていません/;
+  var seenText = {}, ready = false;
+  function goPro(e) {
+    if (e) e.preventDefault();
+    pro.setAttribute("tabindex", "-1");
+    pro.scrollIntoView({ behavior: "smooth", block: "start" });
+    pro.focus({ preventScroll: true });
+  }
+  function linkify(root, deep) {
+    var limitHit = false;
+    var els = root.matches("p, div, span, li") ? [root] : [];
+    if (deep) els = els.concat([].slice.call(root.querySelectorAll("p, div, span, li")));
+    els.forEach(function (el) {
+      if (el.closest(SKIP) || el.closest('[role="radio"], [role="option"], [role="tab"], [role="button"], [tabindex]:not([tabindex="-1"])') || el.querySelector("a, button, p, div, li, input, label")) return;
+      // 選択肢の「○○(買い切り版)」ではなく、文として買い切り版にふれている要素だけ
+      var own = "";
+      for (var n = el.firstChild; n; n = n.nodeType === 1 && n.className === "upsell-inline" ? null : n.nextSibling) if (n.nodeType === 3) own += n.nodeValue;
+      own = own.trim();
+      if (own.indexOf("買い切り版") < 0 || /[((]買い切り版[))]$/.test(own) || /^🔒/.test(own)) return;
+      var key = own.replace(/\d+/g, "#");
+      if (ready && !seenText[key] && LIMIT.test(own) && !el.closest(".teaser, #teaser, [id$=teaser], #tz")) limitHit = true;
+      seenText[key] = 1;
+      if (el.querySelector(".upsell-inline")) return;
+      var a = document.createElement("a");
+      a.className = "upsell-inline";
+      a.href = "#pro-section";
+      a.setAttribute("aria-label", "くわしく:買い切り版の説明へ移動");
+      a.textContent = "くわしく";
+      var ar = document.createElement("span");
+      ar.setAttribute("aria-hidden", "true");
+      ar.textContent = " ↓";
+      a.appendChild(ar);
+      a.addEventListener("click", goPro);
+      el.appendChild(document.createTextNode(" "));
+      el.appendChild(a);
+    });
+    return limitHit;
+  }
+  linkify(document.body, true);
+  setTimeout(function () { ready = true; }, 1500);
+  var topLink = document.querySelector("#upsellTop a");
+  if (topLink) topLink.addEventListener("click", goPro);
+  new MutationObserver(function (ms) {
+    // 変わったところだけを調べる(足された要素はその中も、文字の変更は親要素だけ)
+    var hit = false, done = new Set();
+    function check(t, deep) {
+      if (!t || t.nodeType !== 1 || done.has(t) || t.closest(".upsell-toast")) return;
+      done.add(t);
+      if (linkify(t, deep)) hit = true;
+    }
+    ms.forEach(function (m) {
+      if (m.type === "characterData") { check(m.target.parentNode, false); return; }
+      check(m.target, false);
+      for (var i = 0; i < m.addedNodes.length; i++) if (m.addedNodes[i].nodeType === 1) check(m.addedNodes[i], true);
+    });
+    if (hit) setTimeout(function () { show("limit"); }, 800);
+  }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  document.addEventListener("click", function (e) {
+    var el = e.target && e.target.closest ? e.target.closest("button, div, span, li") : null;
+    var first = el && el.firstChild && el.firstChild.nodeType === 3 ? el.firstChild.nodeValue : "";
+    if (!/^\s*🔒/.test(first) || e.target.closest("#pro-section")) return;
+    if (pc) setTimeout(function () { show("limit"); }, 300); else goPro();
+  }, true);
+  var origAlert = window.alert;
+  window.alert = function (msg) {
+    var r = origAlert.apply(window, arguments);
+    if (/買い切り版/.test(String(msg))) setTimeout(function () { show("limit"); }, 300);
+    return r;
+  };
+})();
+</script>
+<!--UPSELL_JS_END-->
+</body>
+</html>
